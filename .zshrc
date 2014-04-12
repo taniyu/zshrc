@@ -1,29 +1,38 @@
-#-- color
-export LS_COLORS='di=01;34;40:ln=01;36:so=01;32:ex=01;31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
-#eval `dircolors $HOME/zshrc/.dir_colors`
-eval $(dircolors ~/dircolors-solarized/dircolors.ansi-universal)
-
-#-- 補完の設定
-## 大文字小文字を区別しない
-zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
-
-## セパレータの設定
-zstyle ':completion:*' list-separator '-->'
-zstyle ':completion:*:manuals' separate-sections true
-
-## tab補完に関するもの
-autoload -Uz compinit
-compinit
-zstyle ':completion:*:default' menu select=2
-if [ -n "$LS_COLORS" ]; then
-    zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
-fi
-
 #-- alias
 alias ls='ls -F --color'
 alias ll='ls -l'
 alias la='ls -a'
 alias lla='ls -al'
+
+#-- color
+export LS_COLORS='di=01;34;40:ln=01;36:so=01;32:ex=01;31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
+if [ -d "~/dircolors-solarized/" ]; then
+    eval $(dircolors ~/dircolors-solarized/dircolors.ansi-universal)
+fi
+## 256色
+export TERM=xterm-256color
+
+#-- 補完の設定
+## 大文字小文字を区別しない
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
+
+## tab補完に関するもの
+if [ -n "$LS_COLORS" ]; then
+    zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+fi
+## gitやその他もろもろの補完 
+fpath=(~/zsh-completions/src $fpath)
+if [ -e "~/zsh-completions/src" ]; then
+    fpath=(~/zsh-completions/src $fpath)
+else
+    fpath=(~/zshrc/.zsh/completion $fpath)
+    ## セパレータの設定
+    zstyle ':completion:*' list-separator '-->'
+    zstyle ':completion:*:manuals' separate-sections true
+fi
+## 補完機能の有効化
+autoload -Uz compinit; compinit
+zstyle ':completion:*:default' menu select=2
 
 #-- prompt
 local p_cdir="%B%F{blue}[%n@%m][%~]%f%b"$'\n'
@@ -63,11 +72,6 @@ function rprompt-git-current-branch {
 RPROMPT='`rprompt-git-current-branch`'
 
 
-## git の補完
-fpath=(~/zshrc/.zsh/completion $fpath)
-
-# autoload -U compinit
-# compinit -u
 
 #-- 履歴関係
 HISTFILE=~/.zsh_histfile
@@ -87,4 +91,5 @@ setopt auto_pushd
 ## 重複するものは保存しない
 setopt pushd_ignore_dups
 
-
+#-- tmux 用
+PROMPT="$PROMPT"'$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD")'
