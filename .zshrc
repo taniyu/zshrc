@@ -10,6 +10,10 @@ alias gch="git checkout"
 alias gbr="git branch"
 alias glg="git log --graph --pretty=format:'%Cred%h%Creset - %s %Cgreen(%cr) %C(bold blue)<%an>%Creset%C(yellow)%d%Creset' --abbrev-commit --date=relative"
 alias glga="git log --graph --all --pretty=format:'%Cred%h%Creset - %s %Cgreen(%cr) %C(bold blue)<%an>%Creset%C(yellow)%d%Creset' --abbrev-commit --date=relative"
+alias gad="git add"
+alias gcm="git commit"
+alias gps="git push"
+alias gpl="git pull"
 alias be='bundle exec'
 
 #======================================
