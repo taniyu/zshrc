@@ -115,3 +115,11 @@ setopt pushd_ignore_dups
 #-- tmux
 #======================================
 PROMPT="$PROMPT"'$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD")'
+
+#======================================
+#-- emacs client用
+#======================================
+Kill-emacsclient() {
+    emacsclient -e '(kill-emacs)'
+}
+alias emc='emacsclient -nw -a ""'
