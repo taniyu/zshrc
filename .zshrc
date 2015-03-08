@@ -16,6 +16,7 @@ alias gps="git push"
 alias gpl="git pull"
 alias be='bundle exec'
 
+alias delete_merged_branches='git branch -d $(git branch -r --merged | grep origin/ | grep -v master | grep -v develop | sed s~origin/~~)'
 #======================================
 #-- color
 #======================================
