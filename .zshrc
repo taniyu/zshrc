@@ -51,13 +51,6 @@ autoload -Uz compinit; compinit
 zstyle ':completion:*:default' menu select=2
 
 #======================================
-#-- prompt
-#======================================
-local p_cdir="%B%F{blue}[%n@%m][%~]%f%b"$'\n'
-local p_mark="%B%(?,%F{green},%F{red})%(!,#,>)%f%b"
-PROMPT="$p_cdir%# $p_mark "
-
-#======================================
 #-- git
 #======================================
 ## branchを表示
@@ -86,11 +79,25 @@ function rprompt-git-current-branch {
   else
      color=%F{red}
   fi
-  echo "[$color$name$action%f%b] "
+  echo "$color$name$action%f%b "
 }
 
-RPROMPT='`rprompt-git-current-branch`'
+#RPROMPT='`rprompt-git-current-branch`'
 
+#======================================
+#-- prompt
+#======================================
+local p_uinfo="%B%F{blue}[%n@%m]%f%b"
+local p_git='%B%F{blue}[%f%b`rprompt-git-current-branch`'
+local p_cdir="%B%F{blue}%~]%f%b"$'\n'
+local p_mark="%B%(?,%F{green},%F{red})%(!,#,>)%f%b"
+PROMPT="$p_uinfo$p_git$p_cdir%# $p_mark "
+
+# $&apos;%{\e[38;5;46m%}%m%(!.#.$)%{\e[m%} &apos;
+# local p_uinfo="%B%F{blue}[%n@%m]%f%b-->"
+# local p_git='%B%F{blue}[%f%b`rprompt-git-current-branch`'
+# local p_cdir="%B%F{blue}%~]%f%b"$'\n'
+# local p_mark="%B%(?,%F{green},%F{red})%(!,#,>)%f%b"
 
 #======================================
 #-- History
