@@ -7,5 +7,5 @@ zshrc
    (https://github.com/seebi/dircolors-solarized.git)
 3. z
    (https://github.com/rupa/z.git)
-4. oh-my_zsh(.oh_my_zsh という名前でclone)
+4. oh-my_zsh(.oh-my-zsh という名前でclone)
    (git://github.com/robbyrussell/oh-my-zsh.git)
