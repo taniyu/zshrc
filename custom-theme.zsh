@@ -27,6 +27,7 @@ if [[ $terminfo[colors] -ge 256 ]]; then
     cyan="%F{cyan}"
     purple="%F{135}"
     hotpink="%F{161}"
+    red="%F{red}"
     limegreen="%F{118}"
 else
     turquoise="%F{cyan}"
@@ -54,8 +55,8 @@ zstyle ':vcs_info:*:prompt:*' check-for-changes true
 PR_RST="%f"
 FMT_BRANCH="(%{$limegreen%}%b%u%c${PR_RST})"
 FMT_ACTION="(%{$limegreen%}%a${PR_RST})"
-FMT_UNSTAGED="%{$hotpink%} mod"
-FMT_STAGED="%{$cyan%} mod"
+FMT_UNSTAGED="%{$red%} mod"
+FMT_STAGED="%{$limegreen%} mod"
 
 zstyle ':vcs_info:*:prompt:*' unstagedstr   "${FMT_UNSTAGED}"
 zstyle ':vcs_info:*:prompt:*' stagedstr     "${FMT_STAGED}"
@@ -100,4 +101,4 @@ add-zsh-hook precmd steeef_precmd
 
 PROMPT=$'
 %{$purple%}%n${PR_RST}@%{$orange%}%m${PR_RST} %{$turquoise%}%~${PR_RST} $vcs_info_msg_0_$(virtualenv_info)
-$ '
+%# %(?,%{$limegreen%},%{$red%})%(!,#,>)${PR_RST} '
