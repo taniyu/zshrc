@@ -14,9 +14,18 @@ alias gad="git add"
 alias gcm="git commit"
 alias gps="git push"
 alias gpl="git pull"
-alias be='bundle exec'
-
 alias delete_merged_branches='git branch -d $(git branch -r --merged | grep origin/ | grep -v master | grep -v develop | sed s~origin/~~)'
+
+alias be='bundle exec'
+alias berails='bundle exec rails'
+alias berake='bundle exec rake'
+alias railsproduction='RAILS_ENV=production'
+alias railsdevelopment='RAILS_ENV=development'
+alias railstest='RAILS_ENV=test'
+alias ts='tmux new-session -s'
+alias tls='tmux list-sessions'
+alias tksession='tmux kill-session -t'
+alias tkserver='tmux kill-server'
 #======================================
 #-- color
 #======================================
