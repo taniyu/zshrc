@@ -25,6 +25,25 @@ export LS_COLORS='di=01;34;40:ln=01;36:so=01;32:ex=01;31:bd=46;34:cd=43;34:su=41
 ## 256色
 export TERM=xterm-256color
 
+autoload -U colors && colors
+
+#
+# Color定義(あとで変更しやすいように)
+#
+TURQUOISE="%F{81}"
+ORANGE="%F{166}"
+HOSTNAME_C="%F{209}"
+YELLOW="%F{yellow}"
+CYAN="%F{cyan}"
+PURPLE="%F{135}"
+UNAME_C="%F{135}"
+HOTPINK="%F{161}"
+RED="%F{red}"
+LIMEGREEN="%F{118}"
+GRAY="%F{245}"
+BRANCH_NAME="%F{195}"
+RESET="%{${reset_color}%}"
+
 #======================================
 #-- 補完の設定
 #======================================
@@ -53,18 +72,20 @@ zstyle ':completion:*:default' menu select=2
 #======================================
 #-- prompt
 #======================================
-local p_cdir="%B%F{blue}[%n@%m][%~]%f%b"$'\n'
-local p_mark="%B%(?,%F{green},%F{red})%(!,#,>)%f%b"
-PROMPT="$p_cdir%# $p_mark "
 
-#======================================
-#-- git
-#======================================
-## branchを表示
-setopt prompt_subst
-autoload -Uz VCS_INFO_get_data_git; VCS_INFO_get_data_git 2> /dev/null
-function rprompt-git-current-branch {
-  local name st color gitdir action
+#------------------------------------------------
+#  git用関数
+#------------------------------------------------
+
+git_prompt_stash_count () {
+  local COUNT=$(git stash list 2>/dev/null | wc -l | tr -d ' ')
+#  if [ "$COUNT" -gt 0 ]; then
+  echo "($COUNT)"
+#  fi
+}
+
+git-current-branch() {
+  local name st color gitdir action st_text
   if [[ "$PWD" =~ '/\.git(/.*)?$' ]]; then
     return
   fi
@@ -77,20 +98,29 @@ function rprompt-git-current-branch {
   action=`VCS_INFO_git_getaction "$gitdir"` && action="($action)"
 
   st=`git status 2> /dev/null`
-  if [[ -n `echo "$st" | grep "^nothing to"` ]]; then
-    color=%F{green}
-  elif [[ -n `echo "$st" | grep "^nothing added"` ]]; then
-    color=%F{yellow}
-  elif [[ -n `echo "$st" | grep "^# Untracked"` ]]; then
-    color=%B%F{red}
-  else
-     color=%F{red}
+  st_text=""
+  if [[ -n `echo "$st" | grep "Untracked"` ]]; then
+    st_text+="${YELLOW}?"
   fi
-  echo "[$color$name$action%f%b] "
+  if [[ -n `echo "$st" | grep "Changes not staged for commit"` ]]; then
+    st_text+="${RED}*"
+  fi
+  if [[ -n `echo "$st" | grep "^nothing to"` ]]; then
+    st_text+="${LIMEGREEN}${RESET}"
+  fi
+  echo "${st_text}${GRAY}`git_prompt_stash_count` ${LIMEGREEN}${name}${RESET}${action}${RESET}|"
 }
 
-RPROMPT='`rprompt-git-current-branch`'
+autoload -Uz VCS_INFO_get_data_git && VCS_INFO_get_data_git 2> /dev/null
+# プロンプトが表示されるたびにプロンプト文字列を評価、置換する
+setopt PROMPT_SUBST
 
+PROMPT_GIT='`git-current-branch`'
+
+local p_cdir="${UNAME_C}%n${RESET}@${HOSTNAME_C}%m${RESET} ${GRAY}[${PROMPT_GIT}${TURQUOISE}%~${RESET}${GRAY}]${RESET}"
+local p_mark="${RESET}%B%(?,%F{green},%F{red})%(!,#,>)%f%b"
+PROMPT="$p_cdir
+%# $p_mark "
 
 #======================================
 #-- History
