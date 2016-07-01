@@ -154,3 +154,8 @@ Kill-emacsclient() {
     emacsclient -e '(kill-emacs)'
 }
 alias emc='emacsclient -nw -a ""'
+
+#======================================
+#-- z
+#======================================
+source $HOME/z/z.sh
