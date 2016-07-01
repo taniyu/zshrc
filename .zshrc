@@ -112,7 +112,10 @@ git-current-branch() {
     st_text+="${YELLOW}?"
   fi
   if [[ -n `echo "$st" | grep "Changes not staged for commit"` ]]; then
-    st_text+="${RED}*"
+    st_text+="${RED}+"
+  fi
+  if [[ -n `echo "$st" | grep "Changes to be committed"` ]]; then
+    st_text+="${LIMEGREEN}*"
   fi
   if [[ -n `echo "$st" | grep "^nothing to"` ]]; then
     st_text+="${LIMEGREEN}${RESET}"
