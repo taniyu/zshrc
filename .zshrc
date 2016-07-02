@@ -10,6 +10,7 @@ alias gch="git checkout"
 alias gchb="git checkout -b"
 alias gbr="git branch"
 alias gbranchs="git branch -a"
+alias gbranchsupdate="git remote prune origin"
 alias gstashes="git stash list"
 alias gremotes="git remote -v"
 alias glg="git log --graph --pretty=format:'%Cred%h%Creset - %s %Cgreen(%cr) %C(bold blue)<%an>%Creset%C(yellow)%d%Creset' --abbrev-commit --date=relative"
@@ -185,7 +186,8 @@ source $HOME/z/z.sh
 #======================================
 if which peco &> /dev/null; then
     function peco-history-selection() {
-        BUFFER=`history -n 1 | tail -n 1000 | awk '!a[$0]++' | peco`
+        #BUFFER=`history -n 1 | tail -n 1000 | awk '!a[$0]++' | peco`
+        BUFFER=`history 1 | sort -rn | cut -c 8- | awk '!a[$0]++' | peco`
         CURSOR=$#BUFFER
         zle reset-prompt
     }
