@@ -7,11 +7,18 @@ alias la='ls -a'
 alias lla='ls -al'
 alias gst="git status"
 alias gch="git checkout"
+alias gchb="git checkout -b"
 alias gbr="git branch"
+alias gbranchs="git branch -a"
+alias gstashes="git stash list"
+alias gremotes="git remote -v"
 alias glg="git log --graph --pretty=format:'%Cred%h%Creset - %s %Cgreen(%cr) %C(bold blue)<%an>%Creset%C(yellow)%d%Creset' --abbrev-commit --date=relative"
 alias glga="git log --graph --all --pretty=format:'%Cred%h%Creset - %s %Cgreen(%cr) %C(bold blue)<%an>%Creset%C(yellow)%d%Creset' --abbrev-commit --date=relative"
 alias gad="git add"
 alias gcm="git commit"
+alias gcmammend="git commit --amend"
+alias gunstage="git reset HEAD --"
+alias gdiscard="git checkout --"
 alias gps="git push"
 alias gpl="git pull"
 alias delete_merged_branches='git branch -d $(git branch -r --merged | grep origin/ | grep -v master | grep -v develop | sed s~origin/~~)'
@@ -138,6 +145,7 @@ PROMPT="$p_cdir
 #-- History
 #======================================
 HISTFILE=~/.zsh_histfile
+HISTFILE=~/.zsh_history
 HISTSIZE=10000
 SAVEHIST=10000
 ## 履歴を複数端末間で共有
@@ -171,3 +179,21 @@ alias emc='emacsclient -nw -a ""'
 #-- z
 #======================================
 source $HOME/z/z.sh
+
+#======================================
+#-- peco
+#======================================
+if which peco &> /dev/null; then
+    function peco-history-selection() {
+        BUFFER=`history -n 1 | tail -n 1000 | awk '!a[$0]++' | peco`
+        CURSOR=$#BUFFER
+        zle reset-prompt
+    }
+    zle -N peco-history-selection
+    bindkey '^R' peco-history-selection
+
+    function find_cd() {
+        cd "$(z | sort -rn | cut -c 12- | peco)"
+    }
+    alias cdfhist="find_cd"
+fi
