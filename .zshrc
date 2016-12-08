@@ -47,9 +47,16 @@ autoload -U colors && colors
 #
 # Color定義(あとで変更しやすいように)
 #
+function hashed_color () {
+    hash=`echo $1 | cksum | cut -d' ' -f1`
+    COLOR_NUM=$(( $hash % 6 + 1 ))
+    echo $COLOR_NUM
+}
+host_name_colors=("%F{195}" "%F{039}" "%F{123}" "%F{108}" "%F{028}" "%F{209}")
+color_num=`hashed_color $HOSTNAME`
 TURQUOISE="%F{81}"
 ORANGE="%F{166}"
-HOSTNAME_C="%F{209}"
+HOSTNAME_C=$host_name_colors[$color_num]
 YELLOW="%F{yellow}"
 CYAN="%F{cyan}"
 PURPLE="%F{135}"
